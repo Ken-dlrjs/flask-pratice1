@@ -5,7 +5,7 @@ body {
     padding: 0;
 }
 
-header, main, footer { paddding: 1rem; }
+header, main, footer { padding: 1rem; }
 header { background-color: #333; color: #fff; }
 form { margin-bottom: 1rem; }
 ul { list-style-type: none; padding: 0; }
