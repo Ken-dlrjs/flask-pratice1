@@ -17,3 +17,5 @@ a:hover { text-decoration: underline; }
     text-decoration: line-through;
 }
 
+.note { color: #888; font-size: 0.85rem; }
+
