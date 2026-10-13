@@ -33,6 +33,16 @@ def delete(id):
     db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    todo = Todo.query.get_or_404(id)
+    if request.method == 'POST':
+        todo.text = request.form['todo']
+        todo.note = request.form.get('note', '')
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('edit.html', todo=todo)
+
 @app.route('/toggle/<int:id>')
 def toggle(id):
     todo = Todo.query.get_or_404(id)
