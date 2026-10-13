@@ -1,4 +1,4 @@
-#HW 과제 실행 화면
+#HW3 과제 실행 화면
 
 ## 1. 목록 화면
 <img width="567" height="427" alt="HW3_1" src="https://github.com/user-attachments/assets/df24831e-d550-4e4b-a3b6-a9f12da6ba9e" />
