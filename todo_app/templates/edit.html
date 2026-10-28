@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Todo - Todo App{% endblock %}
+
+{% block content %}
+<h2>Edit Todo</h2>
+
+<form method="POST">
+    <input
+        type="text"
+        name="todo"
+        required
+        placeholder="할 일"
+        value="{{ todo.text }}"
+    >
+
+    <input
+        type="text"
+        name="note"
+        placeholder="설명"
+        value="{{ todo.note or '' }}"
+    >
+
+    <button type="submit">저장</button>
+</form>
+
+<a href="{{ url_for('index') }}">Cancel</a>
+
+{% endblock %}
