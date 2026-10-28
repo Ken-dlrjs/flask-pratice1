@@ -43,3 +43,84 @@ class TodoApiTest(unittest.TestCase):
         made = self.client.post("/api/todos/", json={"text": "지울 것"}).get_json()
         self.assertEqual(self.client.delete(f"/api/todos/{made['id']}").status_code, 204)
         self.assertEqual(self.client.get(f"/api/todos/{made['id']}").status_code, 404)
+
+    def test_done_true면_완료된_것만_나온다(self):
+        self.client.post(
+            "/api/todos/",
+            json={"text": "과제", "done": True}
+        )
+        self.client.post(
+            "/api/todos/",
+            json={"text": "공부", "done": False}
+        )
+
+        r = self.client.get("/api/todos/?done=true")
+
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.get_json()), 1)
+        self.assertEqual(r.get_json()[0]["text"], "과제")
+
+    def test_put으로_할_일을_수정한다(self):
+        made = self.client.post(
+            "/api/todos/",
+            json={"text": "기존 할 일"}
+        ).get_json()
+
+        r = self.client.put(
+            f"/api/todos/{made['id']}",
+            json={
+                "text": "수정된 할 일",
+                "done": True,
+                "note": "수정한 설명"
+            }
+        )
+
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.get_json()["text"], "수정된 할 일")
+        self.assertTrue(r.get_json()["done"])
+
+    def test_note가_저장된다(self):
+        r = self.client.post(
+            "/api/todos/",
+            json={
+                "text": "우유 사기",
+                "note": "2리터짜리"
+            }
+        )
+
+        self.assertEqual(r.status_code, 201)
+        self.assertEqual(r.get_json()["note"], "2리터짜리")
+
+    def test_patch로_note만_수정한다(self):
+        made = self.client.post(
+            "/api/todos/",
+            json={
+                "text": "책 반납",
+                "note": "도서관"
+            }
+        ).get_json()
+
+        r = self.client.patch(
+            f"/api/todos/{made['id']}",
+            json={"note": "학교 도서관"}
+        )
+
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.get_json()["text"], "책 반납")
+        self.assertEqual(r.get_json()["note"], "학교 도서관")
+
+    def test_done_false면_미완료만_나온다(self):
+        self.client.post(
+            "/api/todos/",
+            json={"text": "완료", "done": True}
+        )
+        self.client.post(
+            "/api/todos/",
+            json={"text": "미완료", "done": False}
+        )
+
+        r = self.client.get("/api/todos/?done=false")
+
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.get_json()), 1)
+        self.assertEqual(r.get_json()[0]["text"], "미완료")
